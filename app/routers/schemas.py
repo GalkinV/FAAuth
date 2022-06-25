@@ -14,3 +14,5 @@ class SignInQuery(Query):
         min_length=config.MIN_PASSWORD_LENGTH,
         max_length=config.MAX_PASSWORD_LENGTH
     )
+
+

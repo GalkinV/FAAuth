@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from starlette.responses import JSONResponse
 
 import app.routers.db_queries as db
 from app.routers.models import Users
@@ -16,4 +17,6 @@ def users():
 
 @auth_router.post('/sign_in')
 def sign_in(sign_in_data: SignInQuery):
-    return af.sign_in(sign_in_data)
+    user_session = af.sign_in(sign_in_data)
+    user_session_dict = af.get_sign_in_response(user_session)
+    return JSONResponse(content=user_session_dict)

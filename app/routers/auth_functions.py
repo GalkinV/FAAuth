@@ -10,7 +10,7 @@ from fastapi import HTTPException
 import binascii
 
 
-def sign_in(sign_in_data: SignInQuery) -> str:
+def sign_in(sign_in_data: SignInQuery) -> Sessions:
     user = db.get_user_by_email(sign_in_data.email)
 
     if not check_password_hash(user.password_hash, sign_in_data.password.get_secret_value()):
@@ -32,3 +32,13 @@ def create_session(user: Users):
                        refresh_expiration_date=datetime.utcnow() + config.REFRESH_TOKEN_TTL)
     db.save_session(user_session)
     return user_session
+
+
+def get_sign_in_response(session: Sessions) -> dict:
+    resp = {
+        'access_token': session.access_token,
+        'access_token_expires_in': config.ACCESS_TOKEN_TTL.total_seconds(),
+        'refresh_token': session.refresh_token,
+        'refresh_token_expires_in': config.REFRESH_TOKEN_TTL.total_seconds(),
+    }
+    return resp
