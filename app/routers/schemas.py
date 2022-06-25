@@ -16,3 +16,5 @@ class SignInQuery(Query):
     )
 
 
+class RefreshTokensQuery(Query):
+    refresh_token: config.TOKEN_PATTERN

@@ -1,3 +1,4 @@
+from sqlalchemy.orm import joinedload
 from sqlmodel import Session, select
 from .models import Users, Sessions
 import app
@@ -13,7 +14,7 @@ def get_users() -> list[Users]:
 def get_user_by_email(email: str) -> Users:
     with Session(app.db_engine) as session:
         statement = select(Users).where(Users.email == email)
-        user = session.exec(statement).one()
+        user = session.exec(statement).first()
         return user
 
 
@@ -22,3 +23,11 @@ def save_session(user_session: Sessions):
         session.add(user_session)
         session.commit()
         session.refresh(user_session)
+
+
+def get_session_by(**kwargs) -> Sessions:
+    with Session(app.db_engine) as session:
+        statement = select(Sessions).filter_by(**kwargs).options(joinedload(Sessions.user))
+        user_session = session.exec(statement).first()
+        return user_session
+

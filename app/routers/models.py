@@ -9,7 +9,8 @@ class Users(SQLModel, table=True):
     first_name: str
     second_name: str
     last_name: str
-    password_hash: str
+    password_hash: str = Field(exclude=True)
+    active_flag: int
 
     sessions: list["Sessions"] = Relationship(back_populates="user")
 
