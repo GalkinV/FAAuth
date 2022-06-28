@@ -3,6 +3,13 @@ from datetime import datetime
 from sqlmodel import Field, Relationship, SQLModel
 
 
+class Companies(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    active_flag: int
+    name: str
+    api_key: str
+
+
 class Users(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     email: str
@@ -13,6 +20,9 @@ class Users(SQLModel, table=True):
     active_flag: int
 
     sessions: list["Sessions"] = Relationship(back_populates="user")
+
+    company_id: int = Field(default=None, foreign_key="companies.id")
+    # company: Companies = Relationship()
 
 
 class Sessions(SQLModel, table=True):
@@ -28,3 +38,6 @@ class Sessions(SQLModel, table=True):
     class Config:
         fields = {'id': {'exclude': True},
                   'user_id': {'exclude': True}}
+
+
+

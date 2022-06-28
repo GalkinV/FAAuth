@@ -16,6 +16,8 @@ def sign_in(sign_in_data: SignInQuery) -> Sessions:
     if not check_password_hash(user.password_hash, sign_in_data.password.get_secret_value()):
         raise HTTPException(status_code=403, detail="Incorrect email or password.")
 
+    validate_user(user)
+
     session = create_session(user)
     return session
 
@@ -65,6 +67,11 @@ def refresh_tokens(refresh_tokens_data: RefreshTokensQuery):
 
 
 def validate_user(user: Users):
-    is_valid_user = user.active_flag == 1
+    user_company = db.get_company(user.company_id)
+    if user_company is None:
+        is_valid_user = user.active_flag == 1
+    else:
+        is_valid_user = user.active_flag == 1 and user_company.active_flag
     if not is_valid_user:
         raise HTTPException(status_code=403, detail="Invalid user.")
+

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import joinedload
 from sqlmodel import Session, select
-from .models import Users, Sessions
+from .models import Users, Sessions, Companies
 import app
 
 
@@ -31,3 +31,9 @@ def get_session_by(**kwargs) -> Sessions:
         user_session = session.exec(statement).first()
         return user_session
 
+
+def get_company(company_id: int) -> Companies:
+    with Session(app.db_engine) as session:
+        statement = select(Companies).where(Companies.id == company_id)
+        company = session.exec(statement).first()
+        return company
