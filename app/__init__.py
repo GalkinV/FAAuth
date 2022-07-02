@@ -1,12 +1,12 @@
-import os
-
 from fastapi import FastAPI
-from sqlmodel import create_engine, SQLModel
+from sqlmodel import create_engine
 
 import app.routers.views as view
+from config import Settings
 
 app = FastAPI()
 app.include_router(view.auth_router)
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
-db_engine = create_engine(DATABASE_URL)
+
+db_engine = create_engine(Settings().DATABASE_URL)
+

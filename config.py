@@ -1,5 +1,6 @@
+import os
 from datetime import timedelta
-from pydantic import constr
+from pydantic import constr, BaseSettings, PostgresDsn
 
 MIN_PASSWORD_LENGTH = 8
 MAX_PASSWORD_LENGTH = 255
@@ -15,3 +16,7 @@ TOKEN_PATTERN = constr(
     min_length=TOKEN_LENGTH,
     max_length=TOKEN_LENGTH
 )
+
+
+class Settings(BaseSettings):
+    DATABASE_URL: PostgresDsn
